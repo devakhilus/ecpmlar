@@ -22,7 +22,7 @@
             <div class="col-lg-3 col-6">
                 <div class="small-box bg-info">
                     <div class="inner">
-                        <h3></h3>
+                        <h3 id="product-count">0</h3>
                         <p>Products</p>
                     </div>
                     <div class="icon"><i class="fas fa-box"></i></div>
@@ -33,7 +33,7 @@
             <div class="col-lg-3 col-6">
                 <div class="small-box bg-success">
                     <div class="inner">
-                        <h3></h3>
+                        <h3 id="order-count">0</h3>
                         <p>Orders</p>
                     </div>
                     <div class="icon"><i class="fas fa-shopping-basket"></i></div>
@@ -44,7 +44,7 @@
             <div class="col-lg-3 col-6">
                 <div class="small-box bg-warning">
                     <div class="inner">
-                        <h3></h3>
+                        <h3 id="user-count">0</h3>
                         <p>Users</p>
                     </div>
                     <div class="icon"><i class="fas fa-users"></i></div>
@@ -55,7 +55,7 @@
             <div class="col-lg-3 col-6">
                 <div class="small-box bg-danger">
                     <div class="inner">
-                        <h3></h3>
+                        <h3 id="revenue-count">₹0.00</h3>
                         <p>Revenue</p>
                     </div>
                     <div class="icon"><i class="fas fa-dollar-sign"></i></div>
@@ -66,3 +66,23 @@
     </div>
 </section>
 @endsection
+
+@push('scripts')
+<script>
+    function fetchDashboardStats() {
+        fetch("{{ url('/admin/dashboard/stats') }}")
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('product-count').textContent = data.products;
+                document.getElementById('order-count').textContent = data.orders;
+                document.getElementById('user-count').textContent = data.users;
+                document.getElementById('revenue-count').textContent = '₹' + data.revenue;
+            })
+            .catch(error => console.error('Error fetching dashboard stats:', error));
+    }
+
+    // Initial fetch + update every 10 seconds
+    fetchDashboardStats();
+    setInterval(fetchDashboardStats, 10000);
+</script>
+@endpush

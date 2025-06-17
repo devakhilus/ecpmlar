@@ -47,4 +47,8 @@ Route::middleware('auth')->group(function () {
         Route::resource('products', ProductController::class);
         Route::resource('orders', \App\Http\Controllers\Admin\OrderController::class)->names('admin.orders');
     });
+    Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
+        Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
+        Route::get('/dashboard/stats', [App\Http\Controllers\Admin\DashboardController::class, 'stats']);
+    });
 });
